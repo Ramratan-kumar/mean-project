@@ -7,5 +7,6 @@
   "ACK_Dest_Dir": "Ack",
   "NACK_Dest_Dir": "Nack",
   "dir_path":"D:/project/FileIngester/",
-  "use_eFA_store":"false"
+  "use_eFA_store":"false",
+  "secret":"qwertyuiopasdfghjklzxcvbnm1234567890@#"
 }
