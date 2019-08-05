@@ -1,0 +1,11 @@
+{
+  "pathToMongoDb": "mongodb://localhost:27017/myapp",
+  "Download_Source_Dir": "IN",
+  "Download_Source_Move_To": "Ingesting",
+  "Download_Source_Ingesting": "Done",
+  "Download_Source_Error": "Error",
+  "ACK_Dest_Dir": "Ack",
+  "NACK_Dest_Dir": "Nack",
+  "dir_path":"D:/project/FileIngester/",
+  "use_eFA_store":"false"
+}
