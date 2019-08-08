@@ -19,9 +19,9 @@ async function registerUser(req, res) {
             $or: [{ email: req.body.email },
             { username: req.body.username }]
         }, { email: 1, username: 1 });
-        if (existingUser.email === req.body.email) {
+        if ( existingUser && existingUser.email === req.body.email) {
             return res.status(206).json({ message: "Email all ready exists." })
-        } else if (existingUser.username === req.body.username) {
+        } else if (existingUser && existingUser.username === req.body.username) {
             return res.status(206).json({ message: "User Name all ready exists." })
         } else {
             user = new userModel(req.body);
@@ -42,9 +42,7 @@ async function login(req, res) {
 
             $or: [{ email: userEmail },
             { username: userEmail }]
-        }, { password: 1 }
-
-        );
+        }, { password: 1 });
         if (user && passwordHash.verify(req.body.password, user.password)) {
             let token = jwt.sign({ username: userEmail },
                 config.secret,
@@ -52,7 +50,7 @@ async function login(req, res) {
                     expiresIn: '1h' // expires in 24 hours
                 }
             );
-            res.status(200).send({ token: token });
+            res.status(200).send({ jwt: token });
         } else {
             res.status(401).json({ message: "Password or username incorrect." })
         }

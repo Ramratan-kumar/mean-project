@@ -6,7 +6,9 @@ var logger = require('morgan'),
   dotenv = require('dotenv'),
   mongoose = require('mongoose'),
   validator_pkg = require('validator');
-//var ingester = require("./controller/ingester1");
+const csrf = require('csurf');
+const cookie_parser = require('cookie-parser');
+
 bodyParser = require('body-parser'),
   fs = require('fs'),
   config = require('./config'),
@@ -26,9 +28,7 @@ function shouldCompress(req, res) {
 // useragent(true);
 dotenv.load();
 
-readConfigFromEnvVariables();
-
-//mongoose.Promise = global.Promise;
+mongoose.Promise = global.Promise;
 
 
 mongoose.connect(config.pathToMongoDb,function(err,db){
@@ -42,39 +42,29 @@ mongoose.connect(config.pathToMongoDb,function(err,db){
 })
 
 
+csrfProtection = csrf({ cookie: true });
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use(cookie_parser());
 app.use(cors());
+
+app.use(function(req,res,next){
+  //console.log(req.csrfToken());
+
+  console.log("=======",req.headers.cookie);
+  next();
+});
 
 if (process.env.NODE_ENV === 'development') {
   app.use(logger('dev'));
   app.use(errorhandler())
 }
 
-//ingester.triggerBoxofficeIngester();
-
-
 http.createServer(app).listen(3000, function (err) {
   console.log('listening on http://localhost:' + 3000);
 });
 
-function readConfigFromEnvVariables() {
-  if (process.env.pathToMongoDb != null) {
-    config.pathToMongoDb = process.env.pathToMongoDb;
-  }
-  if (process.env.tmsConfig_url != null) {
-    config.tmsConfig_url = process.env.tmsConfig_url;
-  }
-  /*if(process.env.foa_core_url != null){
-    config.foa_core_url = process.env.foa_core_url;
-  }*/
 
-  console.log("Using MongoDB from : " + config.pathToMongoDb);
-  // console.log("Using FoA core URL as : " + config.foa_core_url);
-  try {
-    console.log(validator_pkg.escape(fs.readFileSync('build.html', 'utf8').toString()));
-  } catch (err) { }
-}
 
 
 //This should be last always
