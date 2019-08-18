@@ -4,6 +4,7 @@ import { LoginComponent } from './login.component';
 import { RegistrationComponent } from './registration.component';
 
 const router : Routes = [
+    
     {
         path:'login',component:LoginComponent,
     

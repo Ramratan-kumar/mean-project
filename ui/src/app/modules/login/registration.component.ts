@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { FormControl,FormGroup,Validators } from '@angular/forms'
+import { FormControl,FormGroup,Validators } from '@angular/forms';
+import { HttpService } from '../../service/https_service/httpService';
+import { URL } from '../../shared/url';
 @Component({
     selector:'app-registration',
     templateUrl: './registration.component.html',
@@ -8,13 +10,13 @@ import { FormControl,FormGroup,Validators } from '@angular/forms'
 
 export class RegistrationComponent {
     registrationForm:FormGroup
-    constructor(){
+    constructor(private httpService:HttpService){
 
     }
     ngOnInit(){
         this.registrationForm = new FormGroup({
-            fullname: new FormControl(''),
-            lastname: new FormControl(''),
+            username: new FormControl(''),
+            
             email: new FormControl(''),
             contactNum: new FormControl(''),
             password: new FormControl('')
@@ -22,6 +24,10 @@ export class RegistrationComponent {
         })
     }
     registration(){
-        console.log(this.registrationForm)
+        if(this.registrationForm.valid){
+            this.httpService.save(URL.registerUser,this.registrationForm.value).subscribe((res)=>{
+                console.log(res);
+            })
+        }
     }
 }
