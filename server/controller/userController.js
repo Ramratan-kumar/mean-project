@@ -19,7 +19,7 @@ async function registerUser(req, res) {
             $or: [{ email: req.body.email },
             { username: req.body.username }]
         }, { email: 1, username: 1 });
-       
+
         if (existingUser && existingUser.email === req.body.email) {
             return res.status(206).json({ message: "Email all ready exists." })
         } else if (existingUser && existingUser.username === req.body.username) {
@@ -53,9 +53,9 @@ async function login(req, res) {
                     expiresIn: '1h' // expires in 24 hours
                 }
             );
-            res.setHeader('token',token);
-            res.setHeader('Access-Control-Expose-Headers','token');
-            res.status(200).send({message:"Authenticated"});
+            res.setHeader('token', token);
+            res.setHeader('Access-Control-Expose-Headers', 'token');
+            res.status(200).send({ message: "Authenticated" });
         } else {
             res.status(401).json({ message: "Password or username incorrect." })
         }
@@ -72,5 +72,13 @@ async function getUserDetails(req, res) {
         console.log(err);
         res.status(400).send(err);
     }
+}
+
+async function getLogedInUserDetails(req, res) {
+try{
+    
+}catch(err){
+
+}
 }
 
