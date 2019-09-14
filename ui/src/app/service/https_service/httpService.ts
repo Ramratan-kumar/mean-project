@@ -14,9 +14,10 @@ export class HttpService {
 
     setHeader() {
         let authorizedToken = this.cookieService.get('token');
+        console.log(authorizedToken);
         this.header_options = new HttpHeaders({ 'Content-Type': 'application/json' })
             .set('Access-Control-Allow-Origin', '*')
-            .set('Authorization', `Bearer $authorizedToken`)
+            .set('Authorization', 'Bearer ' + authorizedToken)
             
 
     }
@@ -28,6 +29,7 @@ export class HttpService {
             .pipe(tap(res => console.log(res)), catchError(this.handleError));
     }
     getData(url: string): Observable<any> {
+        this.setHeader();
         return this.http.get(environment.base_url + url, 
             { headers: this.header_options, observe: 'response' }).pipe(catchError(this.handleError));
     }

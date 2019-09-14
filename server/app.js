@@ -49,9 +49,6 @@ app.use(cookie_parser());
 app.use(cors());
 
 app.use(function(req,res,next){
-  //console.log(req.csrfToken());
-
-  console.log("=======",req.headers.cookie);
   next();
 });
 

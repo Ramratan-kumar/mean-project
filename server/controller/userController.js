@@ -47,7 +47,11 @@ async function login(req, res) {
 
         );
         if (user && passwordHash.verify(req.body.password, user.password)) {
-            let token = jwt.sign({ username: userEmail },
+            let token = jwt.sign({
+                username: user._doc.username,
+                email: user._doc.email,
+                id: user._doc._id,
+            },
                 config.secret,
                 {
                     expiresIn: '1h' // expires in 24 hours
@@ -67,18 +71,13 @@ async function login(req, res) {
 
 async function getUserDetails(req, res) {
     try {
-        res.send({ message: "Success" });
+        let user = await userModel.findOne({_id:req.user.id});
+        user._doc.password = undefined;
+        res.status(200).send(user);
     } catch (err) {
         console.log(err);
         res.status(400).send(err);
     }
 }
 
-async function getLogedInUserDetails(req, res) {
-try{
-    
-}catch(err){
-
-}
-}
 

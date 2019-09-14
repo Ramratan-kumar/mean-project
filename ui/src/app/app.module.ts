@@ -8,16 +8,24 @@ import { LoginModule } from './modules/login/login.module';
 import { HttpClientModule } from '@angular/common/http';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { CookieService } from 'ngx-cookie-service';
+import { SharedModule } from './shared/shared.module'
+
+
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    
+    
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
+    SharedModule,
     AppRoutingModule,
     LoginModule,
     DashboardModule
+    
+    
   ],
   providers: [CookieService],
   bootstrap: [AppComponent]
