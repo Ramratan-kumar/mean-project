@@ -15,15 +15,19 @@ module.exports = {
 async function registerUser(req, res) {
     try {
         req.body.password = passwordHash.generate(req.body.password);
+        req.body.username = req.body.email.split('@')[0];
         existingUser = await userModel.findOne({
             $or: [{ email: req.body.email },
-            { username: req.body.username }]
-        }, { email: 1, username: 1 });
+            { username: req.body.username },
+            { contactNum: req.body.contactNum }]
+        }, { email: 1, username: 1, contactNum: 1 });
 
         if (existingUser && existingUser.email === req.body.email) {
-            return res.status(206).json({ message: "Email all ready exists." })
+            return res.status(206).json({ message: "Email already exists." });
         } else if (existingUser && existingUser.username === req.body.username) {
-            return res.status(206).json({ message: "User Name all ready exists." })
+            return res.status(206).json({ message: "User Name already exists." });
+        } else if (existingUser && existingUser.contactNum === req.body.contactNum) {
+            return res.status(206).json({ message: "Contact number already exists." });
         } else {
             user = new userModel(req.body);
             await user.save();
@@ -38,11 +42,12 @@ async function registerUser(req, res) {
 
 async function login(req, res) {
     try {
-        userEmail = req.body.email ? req.body.email.toLowerCase() : req.body.username.toLowerCase();
+        userName = req.body.username.toLowerCase();
         user = await userModel.findOne({
 
-            $or: [{ email: userEmail },
-            { username: userEmail }]
+            $or: [{ email: userName },
+            { username: userName },
+            { contactNum: userName }]
         }, { password: 1 }
 
         );
@@ -71,7 +76,7 @@ async function login(req, res) {
 
 async function getUserDetails(req, res) {
     try {
-        let user = await userModel.findOne({_id:req.user.id});
+        let user = await userModel.findOne({ _id: req.user.id });
         user._doc.password = undefined;
         res.status(200).send(user);
     } catch (err) {
@@ -79,5 +84,3 @@ async function getUserDetails(req, res) {
         res.status(400).send(err);
     }
 }
-
-

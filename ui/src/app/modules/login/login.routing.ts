@@ -15,7 +15,8 @@ const router : Routes = [
 ]
 
 @NgModule({
-    imports:[ RouterModule.forRoot(router)]
+    imports:[ RouterModule.forRoot(router)],
+    exports:[RouterModule]
 })
 
 export class LoginRoutingModule {}
