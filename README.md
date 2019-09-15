@@ -1,11 +1,11 @@
 # mean-project
 
 # PROJECT TECHNOLOGY
- CLIENT
+# CLIENT
  ANGULAR 8
 # BACK END (SERVER)
  NODEJS v10.15.3
  mongoose 4
  express js
- Database 
+# Database 
  Mongodb latest
