@@ -43,7 +43,7 @@ export class RegistrationComponent {
                 }
                 
             },(err)=>{
-                this.toastr.error(err._body);
+                this.toastr.error(err);
             });
         }
     }

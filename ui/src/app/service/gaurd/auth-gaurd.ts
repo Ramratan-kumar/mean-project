@@ -7,13 +7,14 @@ import { CookieService } from 'ngx-cookie-service';
   providedIn: 'root'
 })
 export class AuthGaurd implements CanActivate {
-  constructor(private cookieService: CookieService){}
+  constructor(private cookieService: CookieService) { }
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-   if(this.cookieService.get('isAuthenticate') === 'true'){
-     return true;
-   }
-   return false;
+      console.log(state.url);
+    if (this.cookieService.get('isAuthenticate') === 'true') {
+      return true;
+    }
+    return false;
   }
 } 

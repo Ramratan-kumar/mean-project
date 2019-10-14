@@ -16,7 +16,7 @@ module.exports = {
   if (token) {
     jwt.verify(token, config.secret, (err, decoded) => {
       if (err) {
-        return res.json({
+        return res.status(401).json({
           success: false,
           message: 'Token is not valid'
         });
@@ -26,7 +26,7 @@ module.exports = {
       }
     });
   } else {
-    return res.json({
+    return res.status(401).json({
       success: false,
       message: 'Auth token is not supplied'
     });

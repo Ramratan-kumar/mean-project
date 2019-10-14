@@ -30,6 +30,7 @@
     "mongoose": "^4.13.19",
     "morgan": "~1.9.0",
     "node-png": "^0.4.3",
+    "nodemailer": "^6.3.0",
     "passport": "*",
     "passport-azure-ad": "^3.0.12",
     "password-hash": "^1.2.2",

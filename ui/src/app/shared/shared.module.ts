@@ -1,20 +1,30 @@
 import { NgModule } from '@angular/core';
 import { FooterComponent } from './footer/footer.component';
-import { HeaderComponent } from './header/header.component';
-import {MatToolbarModule} from '@angular/material/toolbar';
+
+import { MatToolbarModule } from '@angular/material/toolbar';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import { NavbarComponent } from './navbar/navbar.component';
 import { ToastrService } from 'ngx-toastr';
-import { ToastrModule,ToastNoAnimationModule,ToastNoAnimation } from 'ngx-toastr';
+import { RouterModule } from '@angular/router';
+import { ToastrModule, ToastNoAnimationModule, ToastNoAnimation } from 'ngx-toastr';
 
 @NgModule({
     imports: [
         MatToolbarModule,
+        MatSidenavModule,
+        RouterModule,
         ToastNoAnimationModule.forRoot()
     ],
     declarations: [
         FooterComponent,
-        HeaderComponent
+        NavbarComponent
     ],
-    providers: [ToastrService]
+    providers: [ToastrService],
+    exports: [
+        FooterComponent,
+        NavbarComponent,
+        MatSidenavModule,
+        RouterModule]
 
 })
 export class SharedModule { }

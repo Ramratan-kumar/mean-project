@@ -2,16 +2,19 @@ var mongoose = require('mongoose');
 var userModel = require('../models/userModel');
 var passwordHash = require('password-hash');
 var fs = require('fs');
-var path = "D:/project/FileIngester/";
 const jwt = require('jsonwebtoken');
 let config = require('../config');
-
+var events = require('events');
+var eventEmitter = new events();
+const mailService = require('../services/mailService');
 module.exports = {
     registerUser: registerUser,
     getUserDetails: getUserDetails,
-    login: login
+    login: login,
+    updateUser:updateUser
 }
 
+//eventEmitter.emit('sendMail',{});
 async function registerUser(req, res) {
     try {
         req.body.password = passwordHash.generate(req.body.password);
@@ -31,12 +34,17 @@ async function registerUser(req, res) {
         } else {
             user = new userModel(req.body);
             await user.save();
+            mailService.sendMail({
+                recipientEmail: req.body.email,
+                subject: 'Registered',
+                message: '<b> Registration success <b>'
+            });
             res.status(200).json({ message: "User created successfully" });
         }
 
     } catch (err) {
         console.error(err);
-        res.status(400).send(err);
+        res.status(400).send("Some thing went wrong.");
     }
 }
 
@@ -55,7 +63,7 @@ async function login(req, res) {
             let token = jwt.sign({
                 username: user._doc.username,
                 email: user._doc.email,
-                id: user._doc._id,
+                id: user._doc._id
             },
                 config.secret,
                 {
@@ -82,5 +90,18 @@ async function getUserDetails(req, res) {
     } catch (err) {
         console.log(err);
         res.status(400).send(err);
+    }
+}
+
+async function updateUser(req,res){
+    try{
+        let updatedUser = await userModel.updateOne({_id:req.body.userId},{$set:{gender:req.body.gender}});
+        if(updatedUser.n>0){
+            res.status(200).send({message:'Updated success.'})
+        }else{
+            res.status(204).send({message:'Data not found'});
+        }
+    }catch(err){
+        res.status(400).send('Some thing went wrong');
     }
 }
