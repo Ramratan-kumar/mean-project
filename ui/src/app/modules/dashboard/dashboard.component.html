@@ -1,11 +1,12 @@
-<div [ngClass]="{'male-background-color':gender == 'male','female-background-color':gender == 'female'}">
+
+<div [ngClass]="{'male-background-color':gender == 'male','female-background-color':gender == 'female','full-height':true}" >
     <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 form-group">
         <div>
-          <input id="male" type="radio" value="male" name="gender"  (change)="updateGenderUser('male')">
+          <input id="male" type="radio" value="male" name="gender" [checked]="userDetails?.gender === 'male'"  (change)="updateGenderUser('male')">
           <label for="male">Male</label>
         </div>
         <div>
-          <input id="female" type="radio" value="female" name="gender" (change)="updateGenderUser('female')">
+          <input id="female" type="radio" value="female" name="gender"  [checked]="userDetails?.gender === 'female'" (change)="updateGenderUser('female')">
           <label for="female">Female</label>
         </div>
       </div>

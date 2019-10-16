@@ -1,14 +1,14 @@
 let jwt = require('jsonwebtoken');
 let config = require('../config');
-
+var userModel = require('../models/userModel');
 
 module.exports = {
-    verifyToken:verifyToken
+  verifyToken: verifyToken
 }
 
- function verifyToken(req, res, next) {
+function verifyToken(req, res, next) {
   let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
-  if ( token && token.startsWith('Bearer ')) {
+  if (token && token.startsWith('Bearer ')) {
     // Remove Bearer from string
     token = token.slice(7, token.length);
   }
@@ -22,7 +22,19 @@ module.exports = {
         });
       } else {
         req.user = decoded;
-        next();
+        userModel.findOne({ _id: req.user._id }, (err, result) => {
+          if (err) {
+            return res.status(400).json({ success: false, message: err });
+          } else if (result) {
+            next();
+          } else {
+            return res.status(401).json({
+              success: false,
+              message: 'Token is not valid'
+            });
+          }
+        });
+
       }
     });
   } else {

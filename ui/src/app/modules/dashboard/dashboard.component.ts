@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { HttpService } from '../../service/https_service/httpService';
 import { URL } from '../../shared/url';
 import { ToastrService } from 'ngx-toastr';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
     selector: "app-dashbord",
@@ -12,7 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 export class DashboardComponent {
     gender: any;
     userDetails: any;
-    constructor(private httpService: HttpService, private toastr: ToastrService, ) { }
+    constructor(private httpService: HttpService, private toastr: ToastrService, private cookieService:CookieService) { }
     ngOnInit() {
         this.getUserDetails();
     }
@@ -20,6 +21,7 @@ export class DashboardComponent {
     getUserDetails() {
         this.httpService.getData(URL.userDetials).subscribe((res) => {
             this.userDetails = res.body;
+            this.gender = this.userDetails.gender;
         }, (err) => {
             this.toastr.error(err);
         });
@@ -27,13 +29,13 @@ export class DashboardComponent {
 
     updateGenderUser(value) {
         let reqObj = {
-            userId: this.userDetails?this.userDetails._id:'',
             gender: value
         }
         this.httpService.update(URL.updateGender, reqObj).subscribe((res) => {
             if (res.status === 200) {
                 this.gender = value;
                 this.toastr.success(res.body.message);
+                this.cookieService.set('token',res.headers.get('token'));
             } else {
                 this.toastr.error(res.body.message);
             }

@@ -7,9 +7,10 @@ import { Router } from '@angular/router';
     styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent { 
-
+    isAuthenticated:any;
     constructor(private cookieService: CookieService, private router:Router){}
     ngOnInit(){
+       
     }
     logout(){
         this.cookieService.deleteAll();

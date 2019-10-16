@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGaurd } from './service/gaurd/auth-gaurd'
 import { LoginComponent } from './modules/login/login.component';
 import { RegistrationComponent } from './modules/login/registration.component';
+import { LoadingComponent } from './loading/loading.component';
 const routes: Routes = [{
   path: '',
   redirectTo: '/login',
@@ -18,9 +19,14 @@ const routes: Routes = [{
   component:RegistrationComponent
 },
 {
-  path: 'dashboard',
-  canActivate: [AuthGaurd],
-  loadChildren: ()=> import(`./modules/dashboard/dashboard.module`).then(m=>m.DashboardModule)
+  path: '',
+  component: LoadingComponent,
+  children:[{
+    path:'dashboard',
+    canActivate: [AuthGaurd],
+    loadChildren: ()=> import(`./modules/dashboard/dashboard.module`).then(m=>m.DashboardModule)
+  }],
+ 
 }];
 
 @NgModule({

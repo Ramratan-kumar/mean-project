@@ -6,7 +6,7 @@ var logger = require('morgan'),
   dotenv = require('dotenv'),
   mongoose = require('mongoose'),
   validator_pkg = require('validator');
-const csrf = require('csurf');
+
 const cookie_parser = require('cookie-parser');
 
 bodyParser = require('body-parser'),
@@ -42,7 +42,7 @@ mongoose.connect(config.pathToMongoDb,function(err,db){
 })
 
 
-csrfProtection = csrf({ cookie: true });
+
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cookie_parser());

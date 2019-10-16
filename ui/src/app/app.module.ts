@@ -8,8 +8,8 @@ import { LoginModule } from './modules/login/login.module';
 import { HttpClientModule } from '@angular/common/http';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { CookieService } from 'ngx-cookie-service';
-import { SharedModule } from './shared/shared.module'
-
+//import { SharedModule } from './shared/shared.module'
+import { LoadingModule } from './loading/loading.module';
 
 @NgModule({
   declarations: [
@@ -21,10 +21,11 @@ import { SharedModule } from './shared/shared.module'
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    SharedModule,
+    //SharedModule,
     AppRoutingModule,
     LoginModule,
-    DashboardModule
+    DashboardModule,
+    LoadingModule
     
     
   ],

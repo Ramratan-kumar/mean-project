@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-root',
@@ -8,13 +9,11 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
   title = 'Demo';
-  showFooterAndHeader: boolean;
-  constructor(private route: Router) {
-    const url = window.location.href.split('/').pop();
-    this.showFooterAndHeader = (url === 'login' || url === 'register') ? false : true;
-    console.log(this.route.url);
+ 
+  constructor(private route: Router,private cookieService:CookieService) {
+    
    }
   ngOnInit() {
-    
+   
   }
 }
