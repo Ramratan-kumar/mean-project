@@ -1,16 +1,16 @@
 
 var userModel = require('../models/userModel');
+var bookingModel = require('../models/bookingModel');
 var passwordHash = require('password-hash');
 const jwt = require('jsonwebtoken');
 let config = require('../config');
-
 
 
 module.exports = {
     registerUser: registerUser,
     getUserDetails: getUserDetails,
     login: login,
-    updateUser:updateUser
+    updateUser: updateUser
 }
 
 //eventEmitter.emit('sendMail',{});
@@ -42,7 +42,7 @@ async function registerUser(req, res) {
     }
 }
 
-function createToken(user){
+function createToken(user) {
     let token = jwt.sign({
         username: user.username,
         email: user.email,
@@ -55,7 +55,7 @@ function createToken(user){
         }
     );
     return token;
-    
+
 }
 async function login(req, res) {
     try {
@@ -72,6 +72,7 @@ async function login(req, res) {
             token = createToken(user._doc);
             res.setHeader('token', token);
             res.setHeader('Access-Control-Expose-Headers', 'token');
+            await updateUser(req.body);
             res.status(200).send({ message: "Authenticated" });
         } else {
             res.status(401).json({ message: "Password or username incorrect." })
@@ -79,6 +80,43 @@ async function login(req, res) {
     } catch (err) {
         res.status(400).send("Some thing went wrong.");
     }
+
+}
+
+async function updateUser(reqData) {
+    try {
+        await userModel.updateOne({ _id: reqData._id }, { active: true, location: reqData.location });
+    } catch (err) {
+        throw err;
+    }
+}
+
+async function bookAuto(req, res) {
+    try {
+        let availableAuto = await userModel.findOneAndUpdate(
+            { userType: 'autodriver', active: true, location: { $near: [req.body.latitue, req.body.longitute] } },
+            { $set: { booked: true } });
+        res.status(200).send(availableAuto);
+    } catch (err) {
+        res.status(400).send("Some thing went wrong");
+    }
+}
+
+async function logout(req, res) {
+    try {
+        updated = await userModel.findOne({ _id: req.user._id }, { active: false });
+        if (updated.n > 0) {
+            res.status(200).send({ message: 'logout success' });
+        } else {
+            res.status(401).send('Not found');
+        }
+
+    } catch (err) {
+        res.status(400).send('Some thing went wrong');
+    }
+}
+
+async function getBookingDetails(req, res) {
 
 }
 
@@ -93,20 +131,20 @@ async function getUserDetails(req, res) {
     }
 }
 
-async function updateUser(req,res){
-    try{
-       
-        let updatedUser = await userModel.updateOne({_id:req.user._id},{$set:{gender:req.body.gender}});
-        if(updatedUser){
+async function updateUser(req, res) {
+    try {
+
+        let updatedUser = await userModel.updateOne({ _id: req.user._id }, { $set: { gender: req.body.gender } });
+        if (updatedUser) {
             req.user.gender = req.body.gender;
             let token = createToken(req.user);
             res.setHeader('token', token);
             res.setHeader('Access-Control-Expose-Headers', 'token');
-            res.status(200).send({message:'Updated success.'});
-        }else{
-            res.status(204).send({message:'Data not found'});
+            res.status(200).send({ message: 'Updated success.' });
+        } else {
+            res.status(204).send({ message: 'Data not found' });
         }
-    }catch(err){
+    } catch (err) {
         console.error(err);
         res.status(400).send('Some thing went wrong');
     }
