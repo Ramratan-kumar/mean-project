@@ -96,6 +96,8 @@ async function bookAuto(req, res) {
         let availableAuto = await userModel.findOneAndUpdate(
             { userType: 'autodriver', active: true, location: { $near: [req.body.latitue, req.body.longitute] } },
             { $set: { booked: true } });
+        let newBookingObj = { driverId: availableAuto._id, userId: req.user._id, dateTime: new Date(), location: req.body };
+        await bookingModel.insert({ newBookingObj });
         res.status(200).send(availableAuto);
     } catch (err) {
         res.status(400).send("Some thing went wrong");
