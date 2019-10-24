@@ -119,7 +119,32 @@ async function logout(req, res) {
 }
 
 async function getBookingDetails(req, res) {
+    try{
+        let bookingDetails = await bookingModel.aggregate({$match:{$or:[{userId:req.user._id},{driverId:req.user._id}]}},
+             {$lookup: {
+                        from: "user",
+                        let:{userId: "$userId", driverId:"$driverId"},
+                        pipeline: [
+                            {
+                                $match:
+                                {
+                                    
+                                    $expr:
+                                    {
+                                        $or:
+                                        [
+                                            { $eq: ["$_id", "$$userId"] },
+                                            { $eq: ["$_id", "$$driverId"] }
+                                        ]
+                                    }
+                                }
+                            }
 
+                        ], as: "userDetails"
+                    }});
+    }catch(err){
+
+    }
 }
 
 async function getUserDetails(req, res) {
