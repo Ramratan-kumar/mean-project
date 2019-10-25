@@ -6,6 +6,7 @@ var userController = require('../controller/userController');
 router.get('/details', middleWare.verifyToken, userController.getUserDetails);
 router.post('/register', userController.registerUser);
 router.post('/login', userController.login);
-router.put('/update-gender', middleWare.verifyToken, userController.updateUser)
+router.post('/logout', middleWare.verifyToken, userController.logout);
+
 
 module.exports = router;

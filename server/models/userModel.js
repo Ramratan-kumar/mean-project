@@ -8,10 +8,10 @@ var userSchema = new schema({
     password: { type: String, required: true },
     contactNum: { type: String, required: true, unique: true },
     gender: { type: String },
-    userType: { type: String },
+    userType: { type: String,required:true },
     active: { type: Boolean, default: false },
-    booked: { type: Boolean, default: false },
-    location: { latitued: String, longitude: String }
+    bookingStatus: { type: String }, //pending,booked,cancle
+    location: { latitude: String, longitude: String }
 });
 
 const userModel = mongoose.model('user', userSchema);

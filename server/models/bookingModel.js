@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
-var schema = mongoose.Schema;
+var Schema = mongoose.Schema;
 
-var bookingSchema = new schema({
-    location: { latitued: String, longitude: String },
+var bookingSchema = new Schema({
+    location: { latitude: String, longitude: String },
     driverId:{type:Schema.Types.ObjectId,ref:"user"},
     userId:{type:Schema.Types.ObjectId,ref:"user"},
     dateTime:{type:Date}

@@ -24,7 +24,8 @@ export class RegistrationComponent {
             name: new FormControl('', [Validators.required]),
             email: new FormControl('', [Validators.required, Validators.pattern(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)]),
             contactNum: new FormControl('', [Validators.required, Validators.pattern(/^(\+\d{1,3}[- ]?)?\d{10}$/)]),
-            password: new FormControl('', [Validators.required, Validators.minLength(8)])
+            password: new FormControl('', [Validators.required, Validators.minLength(8)]),
+            userType: new FormControl('')
 
         })
     }

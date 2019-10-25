@@ -74,5 +74,6 @@ app.use(function (err, req, res, next) {
 //register router
 
 app.use('/user', require('./router/users'));
+app.use('/booking', require('./router/bookingRouter'));
 
 module.exports = app;

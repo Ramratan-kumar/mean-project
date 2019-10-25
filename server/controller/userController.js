@@ -10,10 +10,10 @@ module.exports = {
     registerUser: registerUser,
     getUserDetails: getUserDetails,
     login: login,
-    updateUser: updateUser
+    logout: logout
+    
 }
 
-//eventEmitter.emit('sendMail',{});
 async function registerUser(req, res) {
     try {
         req.body.password = passwordHash.generate(req.body.password);
@@ -47,7 +47,7 @@ function createToken(user) {
         username: user.username,
         email: user.email,
         _id: user._id,
-        gender: user.gender
+        type:user.userType
     },
         config.secret,
         {
@@ -65,14 +65,16 @@ async function login(req, res) {
             $or: [{ email: userName },
             { username: userName },
             { contactNum: userName }]
-        }, { password: 1 }
+        }, { password: 1, userType:1 }
 
         );
         if (user && passwordHash.verify(req.body.password, user.password)) {
             token = createToken(user._doc);
             res.setHeader('token', token);
             res.setHeader('Access-Control-Expose-Headers', 'token');
-            await updateUser(req.body);
+            if(user._doc.userType==='driver'){
+                await updateUser(user._doc,req.body.location);
+            }
             res.status(200).send({ message: "Authenticated" });
         } else {
             res.status(401).json({ message: "Password or username incorrect." })
@@ -83,26 +85,15 @@ async function login(req, res) {
 
 }
 
-async function updateUser(reqData) {
+async function updateUser(userData,location) {
     try {
-        await userModel.updateOne({ _id: reqData._id }, { active: true, location: reqData.location });
+        await userModel.updateOne({ _id: userData._id }, { active: true, location: location });
     } catch (err) {
         throw err;
     }
 }
 
-async function bookAuto(req, res) {
-    try {
-        let availableAuto = await userModel.findOneAndUpdate(
-            { userType: 'autodriver', active: true, location: { $near: [req.body.latitue, req.body.longitute] } },
-            { $set: { booked: true } });
-        let newBookingObj = { driverId: availableAuto._id, userId: req.user._id, dateTime: new Date(), location: req.body };
-        await bookingModel.insert({ newBookingObj });
-        res.status(200).send(availableAuto);
-    } catch (err) {
-        res.status(400).send("Some thing went wrong");
-    }
-}
+
 
 async function logout(req, res) {
     try {
@@ -118,61 +109,12 @@ async function logout(req, res) {
     }
 }
 
-async function getBookingDetails(req, res) {
-    try{
-        let bookingDetails = await bookingModel.aggregate({$match:{$or:[{userId:req.user._id},{driverId:req.user._id}]}},
-             {$lookup: {
-                        from: "user",
-                        let:{userId: "$userId", driverId:"$driverId"},
-                        pipeline: [
-                            {
-                                $match:
-                                {
-                                    
-                                    $expr:
-                                    {
-                                        $or:
-                                        [
-                                            { $eq: ["$_id", "$$userId"] },
-                                            { $eq: ["$_id", "$$driverId"] }
-                                        ]
-                                    }
-                                }
-                            }
-
-                        ], as: "userDetails"
-                    }});
-    }catch(err){
-
-    }
-}
-
 async function getUserDetails(req, res) {
     try {
-        let user = await userModel.findOne({ _id: req.user._id });
-        user._doc.password = undefined;
+        let user = await userModel.findOne({ _id: req.user._id },{password:0});
         res.status(200).send(user);
     } catch (err) {
-        console.log(err);
         res.status(400).send(err);
     }
 }
 
-async function updateUser(req, res) {
-    try {
-
-        let updatedUser = await userModel.updateOne({ _id: req.user._id }, { $set: { gender: req.body.gender } });
-        if (updatedUser) {
-            req.user.gender = req.body.gender;
-            let token = createToken(req.user);
-            res.setHeader('token', token);
-            res.setHeader('Access-Control-Expose-Headers', 'token');
-            res.status(200).send({ message: 'Updated success.' });
-        } else {
-            res.status(204).send({ message: 'Data not found' });
-        }
-    } catch (err) {
-        console.error(err);
-        res.status(400).send('Some thing went wrong');
-    }
-}

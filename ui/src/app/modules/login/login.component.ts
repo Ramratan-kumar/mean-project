@@ -16,6 +16,7 @@ import { ToastrService } from 'ngx-toastr';
 export class LoginComponent {
     loginForm: FormGroup;
     submitted:boolean;
+    positionPoint:any;
     constructor(private httpService: HttpService,
          private cookieService: CookieService,
          private router:Router,
@@ -25,7 +26,8 @@ export class LoginComponent {
         this.loginForm = new FormGroup({
             username: new FormControl('',[Validators.required]),
             password: new FormControl('',[Validators.required, Validators.minLength(8)])
-        })
+        });
+        this.getPosition();
     }
     login() {
         this.submitted = true;
@@ -33,7 +35,9 @@ export class LoginComponent {
             this.submitted = false;
             var hash = cryptoJs.SHA256(this.loginForm.value.password);
             this.loginForm.value.password = hash.toString(cryptoJs.enc.Hex);
-            this.httpService.save(URL.login, this.loginForm.value).subscribe((res) => {
+            let reqObj = this.loginForm.value;
+            reqObj.location = this.positionPoint;
+            this.httpService.save(URL.login, reqObj).subscribe((res) => {
                 this.cookieService.set('token',res.headers.get('token'));
                 this.cookieService.set('isAuthenticate','true');
                 this.router.navigate(['/dashboard']);
@@ -41,5 +45,15 @@ export class LoginComponent {
                 this.toastr.error(err);
             });
         }
+    }
+    getPosition() {
+        navigator.geolocation.getCurrentPosition((position) => {
+            this.positionPoint = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+            }
+            
+        });
+
     }
 }

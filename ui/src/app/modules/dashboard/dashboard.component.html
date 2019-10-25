@@ -1,13 +1,17 @@
 
-<div [ngClass]="{'male-background-color':gender == 'male','female-background-color':gender == 'female','full-height':true}" >
-    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 form-group">
-        <div>
-          <input id="male" type="radio" value="male" name="gender" [checked]="userDetails?.gender === 'male'"  (change)="updateGenderUser('male')">
-          <label for="male">Male</label>
-        </div>
-        <div>
-          <input id="female" type="radio" value="female" name="gender"  [checked]="userDetails?.gender === 'female'" (change)="updateGenderUser('female')">
-          <label for="female">Female</label>
-        </div>
-      </div>
+<div class="full-height" id="mapholder" >
+    <div>
+     Latituted:{{positionPoint?.latitude}}
+    </div>
+    <div>
+      longitude:{{positionPoint?.longitude}}
+     </div>
+     <div *ngIf="userDetails?.userType=='user'">
+      <button type="button" (click)="bookAuto()" class="btn btn-primary">Book</button>
+     </div>
+     <div *ngIf="userDetails?.userType=='driver' && userDetails.bookingStatus=='pending'">
+      <button type="button" (click)="accept()" class="btn btn-primary">Accept</button>
+      <button type="button" (click)="reject()" class="btn btn-primary">Reject</button>
+     </div>
+     
 </div>

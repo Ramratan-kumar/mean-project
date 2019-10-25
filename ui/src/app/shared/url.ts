@@ -2,5 +2,8 @@ export const URL = {
     registerUser:'user/register',
     login:'user/login',
     userDetials: 'user/details',
-    updateGender:'user/update-gender'
+    bookAuto: 'booking/auto',
+    bookingDetails: 'booking/details',
+    nearByAuto: 'booking/nearbyauto',
+    logout: 'user/logout'
 }

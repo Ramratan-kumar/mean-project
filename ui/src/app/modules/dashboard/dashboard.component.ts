@@ -11,31 +11,39 @@ import { CookieService } from 'ngx-cookie-service';
 })
 
 export class DashboardComponent {
-    gender: any;
+
     userDetails: any;
-    constructor(private httpService: HttpService, private toastr: ToastrService, private cookieService:CookieService) { }
+    positionPoint: any;
+    constructor(private httpService: HttpService, private toastr: ToastrService, private cookieService: CookieService) { }
     ngOnInit() {
         this.getUserDetails();
+        this.showPosition();
+
     }
 
+
+    getNearbyAuto() {
+        this.httpService.getData(URL.nearByAuto+'/'+this.positionPoint.latitude+'/'+this.positionPoint.longitude).subscribe((res) => {
+            console.log(res);
+        }, (err) => {
+            this.toastr.error(err);
+        });
+    }
     getUserDetails() {
         this.httpService.getData(URL.userDetials).subscribe((res) => {
             this.userDetails = res.body;
-            this.gender = this.userDetails.gender;
+            if (this.userDetails.userType === 'driver') {
+                this.getNearbyAuto();
+            }
         }, (err) => {
             this.toastr.error(err);
         });
     }
 
-    updateGenderUser(value) {
-        let reqObj = {
-            gender: value
-        }
-        this.httpService.update(URL.updateGender, reqObj).subscribe((res) => {
+    bookAuto() {
+        this.httpService.update(URL.bookAuto, this.positionPoint).subscribe((res) => {
             if (res.status === 200) {
-                this.gender = value;
-                this.toastr.success(res.body.message);
-                this.cookieService.set('token',res.headers.get('token'));
+
             } else {
                 this.toastr.error(res.body.message);
             }
@@ -45,4 +53,22 @@ export class DashboardComponent {
         });
     }
 
+    accept() {
+
+    }
+
+    reject() {
+
+    }
+
+    showPosition() {
+        navigator.geolocation.getCurrentPosition((position) => {
+            this.positionPoint = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+            }
+
+        });
+
+    }
 }
