@@ -1,5 +1,6 @@
 
-var userModel = require('../models/userModel');
+var userModel = require('../models/userModel').userModel;
+var User = require('../models/userModel').User;
 var bookingModel = require('../models/bookingModel');
 var passwordHash = require('password-hash');
 const jwt = require('jsonwebtoken');
@@ -31,8 +32,8 @@ async function registerUser(req, res) {
         } else if (existingUser && existingUser.contactNum === req.body.contactNum) {
             return res.status(206).json({ message: "Contact number already exists." });
         } else {
-            user = new userModel(req.body);
-            await user.save();
+            user = new User(req.body);
+            await userModel.create(user);
             res.status(200).json({ message: "User created successfully" });
         }
 
@@ -80,6 +81,7 @@ async function login(req, res) {
             res.status(401).json({ message: "Password or username incorrect." })
         }
     } catch (err) {
+        console.error(err);
         res.status(400).send("Some thing went wrong.");
     }
 

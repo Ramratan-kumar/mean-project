@@ -1,6 +1,6 @@
 let jwt = require('jsonwebtoken');
 let config = require('../config');
-var userModel = require('../models/userModel');
+var userModel = require('../models/userModel').userModel;
 
 module.exports = {
   verifyToken: verifyToken
