@@ -28,9 +28,16 @@ async function bookAuto(req, res) {
 
 async function getNearByAuto(req, res) {
     try {
+    
         let nearByAuto = await userModel.find({
             userType: 'driver', active: true,
-            location: { $near: [+req.params.latitude, +req.params.longitude] },
+            location: { $near:
+                {
+                  $geometry: { type: "Point",  coordinates: [+req.params.latitude, +req.params.longitude ] },
+                  $minDistance: 1000,
+                  $maxDistance: 5000
+                }
+             },
             bookingStatus: { $nin: ["pending", "booked"] }
         });
         res.status(200).send(nearByAuto);

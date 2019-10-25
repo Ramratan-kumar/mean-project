@@ -11,7 +11,7 @@ var userSchema = new schema({
     userType: { type: String,required:true },
     active: { type: Boolean, default: false },
     bookingStatus: { type: String }, //pending,booked,cancle
-    location: { latitude: String, longitude: String }
+     location: { type: {type:String} , coordinates: [String] },
 });
 
 const userModel = mongoose.model('user', userSchema);

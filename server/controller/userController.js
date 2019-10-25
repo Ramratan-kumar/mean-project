@@ -87,7 +87,7 @@ async function login(req, res) {
 
 async function updateUser(userData,location) {
     try {
-        await userModel.updateOne({ _id: userData._id }, { active: true, location: location });
+        await userModel.updateOne({ _id: userData._id }, { active: true, location: {type:"Point",coordinates:[location.latitude,location.longitude]} });
     } catch (err) {
         throw err;
     }
