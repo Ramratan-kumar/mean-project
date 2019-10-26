@@ -1,0 +1,29 @@
+<div class="card">
+  <div class=" card-body row form-group" [formGroup]="loginForm">
+
+    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+      <label>User Name</label>
+      <input type="text" class="form-control border-radius" placeholder="Mobile Number or Email" formControlName="username">
+      <span class="text-danger" *ngIf="submitted && loginForm.controls.username.errors?.required">User name is
+        required</span>
+    </div>
+    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+      <label>Password</label>
+      <input type="password" class="form-control border-radius" placeholder="Password" formControlName='password'>
+      <span class="text-danger" *ngIf="submitted && loginForm.controls.password.errors?.required">Password is
+        required</span>
+      <span class="text-danger" *ngIf="submitted && loginForm.controls.password.errors?.minlength">Password
+        should be 8 charecter</span>
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 text-center">
+      <button type="submit" (click)="login()" class="btn btn-primary border-radius">Login</button>
+                                                                        
+    </div>          
+    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 text-center">
+      <a  routerLink ="/register">Click for registration</a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,62 @@
+<div class="card">
+  <div class=" card-body row form-group" [formGroup]="registrationForm">
+
+    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 form-group">
+      <label>Name<span class="text-danger">*</span></label>
+      <input type="text" class="form-control border-radius"
+        [ngClass]="{'is-invalid': submitted && registrationForm.controls.name.errors}" placeholder="Name"
+        formControlName="name">
+      <span class="text-danger" *ngIf="submitted && registrationForm.controls.name.errors?.required">Name is
+        required</span>
+    </div>
+    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 form-group">
+      <label>Email<span class="text-danger">*</span></label>
+      <input type="text" class="form-control border-radius"
+        [ngClass]="{'is-invalid':submitted && registrationForm.controls.email.errors}" placeholder="abcd@xyz.com"
+        formControlName="email">
+      <span *ngIf="submitted && registrationForm.controls.email.errors?.required" class="text-danger">Email is
+        required</span>
+      <span class="text-danger" *ngIf="submitted && registrationForm.controls.email.errors?.pattern">Email
+        is invalid</span>
+    </div>
+    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 form-group">
+      <label>Mobile<span class="text-danger">*</span></label>
+      <input type="text" class="form-control border-radius"
+        [ngClass]="{'is-invalid':submitted && registrationForm.controls.contactNum.errors}" placeholder="1234567890"
+        formControlName="contactNum">
+      <span class="text-danger" *ngIf="submitted && registrationForm.controls.contactNum.errors?.required">Contact
+        number is required</span>
+      <span class="text-danger" *ngIf="submitted && registrationForm.controls.contactNum.errors?.pattern">Contact
+        number is invalid</span>
+      <span class="text-danger" *ngIf="submitted &&  registrationForm.controls.contactNum.errors?.maxlength ">Contact
+        number is invalid</span>
+    </div>
+    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 form-group">
+      <label>Password<span class="text-danger">*</span></label>
+      <input type="password" class="form-control border-radius"
+        [ngClass]="{'is-invalid':submitted && registrationForm.controls.password.errors}" placeholder="Password"
+        formControlName="password">
+      <span class="text-danger" *ngIf="submitted && registrationForm.controls.password.errors?.required">Password is
+        required</span>
+      <span class="text-danger" *ngIf="submitted && registrationForm.controls.password.errors?.minlength">Password
+        should be 8 charecter</span>
+    </div>
+    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 form-group">
+      <label>User Type<span class="text-danger">*</span></label>
+      <input type="radio" value="driver"
+        [ngClass]="{'is-invalid':submitted && registrationForm.controls.userType.errors}" 
+        formControlName="userType">Driver
+        <input type="radio" value="user"
+        [ngClass]="{'is-invalid':submitted && registrationForm.controls.userType.errors}" 
+        formControlName="userType">User
+      <span class="text-danger" *ngIf="submitted && registrationForm.controls.userType.errors?.required">Type is
+        required</span>
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 text-center">
+      <button type="submit" (click)="registration()" class="btn btn-primary border-radius">Register</button>
+    </div>
+  </div>
+</div>
