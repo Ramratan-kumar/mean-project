@@ -4,6 +4,7 @@ import { AuthGaurd } from './service/gaurd/auth-gaurd'
 import { LoginComponent } from './modules/login/login.component';
 import { RegistrationComponent } from './modules/login/registration.component';
 import { LoadingComponent } from './loading/loading.component';
+import { ChatBoxComponent } from './modules/chat-box/chat-box.component';
 const routes: Routes = [{
   path: '',
   redirectTo: '/login',
@@ -17,6 +18,10 @@ const routes: Routes = [{
 {
   path:'register',
   component:RegistrationComponent
+},
+{
+  path:'chat',
+  component:ChatBoxComponent
 },
 {
   path: '',

@@ -31,15 +31,15 @@ dotenv.load();
 mongoose.Promise = global.Promise;
 
 
-mongoose.connect(config.pathToMongoDb,function(err,db){
-  if(!err)
-  console.log("Successfully connected to MongoDB : " + config.pathToMongoDb);
-  else{
-    console.log("Cannot Connect to mongoDB at " + config.pathToMongoDb);
-    console.log("Exiting...");
-    process.exit();
-  }
-})
+// mongoose.connect(config.pathToMongoDb,function(err,db){
+//   if(!err)
+//   console.log("Successfully connected to MongoDB : " + config.pathToMongoDb);
+//   else{
+//     console.log("Cannot Connect to mongoDB at " + config.pathToMongoDb);
+//     console.log("Exiting...");
+//     process.exit();
+//   }
+// })
 
 
 
@@ -57,12 +57,22 @@ if (process.env.NODE_ENV === 'development') {
   app.use(errorhandler())
 }
 
-http.createServer(app).listen(3000, function (err) {
-  console.log('listening on http://localhost:' + 3000);
+let server = http.createServer(app)
+
+const io = require('socket.io')(server);
+
+io.on("connection", socket => {
+  console.log("socket connected...");
+  socket.on("new_msg", msg => {
+    io.emit("new_msg",msg);
+  });
+
 });
 
 
-
+server.listen(3000, function (err) {
+  console.log('listening on http://localhost:' + 3000);
+});
 
 //This should be last always
 app.use(function (err, req, res, next) {

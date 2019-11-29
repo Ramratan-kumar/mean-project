@@ -10,6 +10,11 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { CookieService } from 'ngx-cookie-service';
 //import { SharedModule } from './shared/shared.module'
 import { LoadingModule } from './loading/loading.module';
+import { ChatBoxModule } from './modules/chat-box/chat-box.model';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
+
+const socketConfig: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
 @NgModule({
   declarations: [
@@ -20,13 +25,15 @@ import { LoadingModule } from './loading/loading.module';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    SocketIoModule.forRoot(socketConfig),
     HttpClientModule,
+    AngularFontAwesomeModule,
     //SharedModule,
     AppRoutingModule,
     LoginModule,
     DashboardModule,
-    LoadingModule
-    
+    LoadingModule,
+    ChatBoxModule
     
   ],
   providers: [CookieService],
