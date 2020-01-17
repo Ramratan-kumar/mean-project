@@ -7,7 +7,13 @@ var userSchema = new schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     contactNum: { type: String, required: true, unique: true },
-    gender: { type: String }
+    gender: { type: String },
+    messages: [{
+        userId: schema.Types.ObjectId,
+        msg: String,
+        dateTime: Date
+    }],
+    dp:{date:Date,img:String}
 });
 
 const userModel = mongoose.model('user', userSchema);

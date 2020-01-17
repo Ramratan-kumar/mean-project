@@ -62,11 +62,23 @@ let server = http.createServer(app)
 const io = require('socket.io')(server);
 
 io.on("connection", socket => {
-  console.log("socket connected...");
-  socket.on("new_msg", msg => {
-    io.emit("new_msg",msg);
-  });
 
+  socket.on('join',(msg)=>{
+    socket.join(msg.groupName); 
+    io.sockets.in(msg.groupName).emit("new_msg",msg);
+  });
+  socket.on('createGroup',(groupName)=>{
+    console.log("Group created...");
+    socket.join(groupName);
+    io.emit('notification',{message:"group created sucess"});
+
+  });
+  socket.on("leaveGroup",(groupName)=>{
+    socket.leave(groupName);
+  });
+  socket.on('disconnect', function(){
+    console.log("disconnected...");
+   });
 });
 
 
