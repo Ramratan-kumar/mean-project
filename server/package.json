@@ -32,7 +32,7 @@
     "passport-azure-ad": "^3.0.12",
     "password-hash": "^1.2.2",
     "pdfkit": "^0.10.0",
-    "pug": "^2.0.3",
+    "pug": "^3.0.1",
     "tiff.js": "^1.0.0",
     "unzip-stream": "^0.3.0",
     "validator": "^10.11.0",
