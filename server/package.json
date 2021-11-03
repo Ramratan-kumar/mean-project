@@ -35,7 +35,7 @@
     "pug": "^2.0.3",
     "tiff.js": "^1.0.0",
     "unzip-stream": "^0.3.0",
-    "validator": "^10.11.0",
+    "validator": "^13.7.0",
     "xml2js-parser": "^1.1.1"
   }
 }
